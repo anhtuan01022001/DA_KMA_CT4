@@ -1,12 +1,12 @@
 #code 29/5/2024
 
 import RPi.GPIO as GPIO
-from mfrc522 import SimpleMFRC522
 import sqlite3
 from datetime import datetime
 import datetime
 from ultralytics import YOLO
 import cv2
+import serial
 import time
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -14,13 +14,15 @@ from PyQt5.QtCore import QTimer, Qt, QRect
 from PyQt5.QtWidgets import QFrame, QMainWindow, QFileDialog, QStyledItemDelegate, QMessageBox
 from PyQt5.QtGui import QPixmap
 
+SERIAL_PORT = '/dev/ttyACM0'  # Check which port your Arduino is connected to
+SERIAL_RATE = 9600
 
 RELAY_PIN = 16  # GPIO pin connected to the relay control pin
-BUTTON_PIN = 12
+# BUTTON_PIN = 12
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(RELAY_PIN, GPIO.OUT)
-GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+# GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 class SerialTerminalApp(QMainWindow):
     def __init__(self):
@@ -83,42 +85,28 @@ def unlock_door_button():
     time.sleep(10)
     GPIO.output(RELAY_PIN, GPIO.LOW)
 
-def button_callback(channel):
-    print("Nút đã được nhấn! Thực hiện chức năng của bạn ở đây.")
-    unlock_door_button()
-    # Cấu hình sự kiện ngắt cho nút bấm
-    GPIO.add_event_detect(BUTTON_PIN, GPIO.FALLING, callback=button_callback, bouncetime=300)
-    time.sleep(10)
-try:
-    while True:
-        time.sleep(1)  # Chương trình chính chạy liên tục và chờ sự kiện
-except KeyboardInterrupt:
-    print("Thoát chương trình")
-finally:
-    GPIO.cleanup() 
+# def button_callback(channel):
+#     print("Nút đã được nhấn! Thực hiện chức năng của bạn ở đây.")
+#     unlock_door_button()
+#     # Cấu hình sự kiện ngắt cho nút bấm
+#     GPIO.add_event_detect(BUTTON_PIN, GPIO.FALLING, callback=button_callback, bouncetime=300)
+#     time.sleep(10)
+# try:
+#     while True:
+#         time.sleep(1)  # Chương trình chính chạy liên tục và chờ sự kiện
+# except KeyboardInterrupt:
+#     print("Thoát chương trình")
+# finally:
+#     GPIO.cleanup() 
     
 def save_unlock_time(user_id):
     conn = sqlite3.connect('detection_data.db')
     c = conn.cursor()
     current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    c.execute("INSERT INTO History (UserID, TimeIn) VALUES (?, ?)", (user_id, current_time))
+    c.execute("INSERT INTO QLLS (UserID, TimeIn) VALUES (?, ?)", (user_id, current_time))
     conn.commit()
     conn.close()
     print(f"LÆ°u thá»i gian má»Ÿ khÃ³a: UserID = {user_id}, TimeIn = {current_time}")
-
-# HÃ m Ä‘á»ƒ Ä‘á»c ID cá»§a tháº» tá»« RFID
-def read_rfid():
-    try:
-        reader = SimpleMFRC522()
-        # Äá»c ID cá»§a tháº» tá»« RFID
-        id, _ = reader.read()
-        return str(id)
-    except KeyboardInterrupt:
-        print("\nChÆ°Æ¡ng trÃ¬nh Ä‘Ã£ bá»‹ ngáº¯t.")
-        return None
-    except Exception as e:
-        print("Lá»—i khi Ä‘á»c tháº»:", e)
-        return None
 
 # HÃ m Ä‘á»ƒ truy xuáº¥t tÃªn chá»§ sá»Ÿ há»¯u tá»« cÆ¡ sá»Ÿ dá»¯ liá»‡u
 def get_owner_name(card_id):
@@ -176,13 +164,14 @@ def face_recognition():
                         cv2.destroyWindow(window_name)  # ÄÃ³ng táº¥t cáº£ cá»­a sá»• OpenCV 
                         return
                     else:
+                        print("Face is cph")
                         #msg = QMessageBox()
                         #msg.setWindowTitle("ThÃ´ng bÃ¡o")
                         #msg.setText("hÃ£y nhÃ¬n vÃ o camera")
                         #msg.exec_()  # Hiá»ƒn thá»‹ thÃ´ng bÃ¡o vÃ  chá» ngÆ°á»i dÃ¹ng Ä‘Ã³ng láº¡i
-                        def close_msg_box():
-                            msg.close()
-                        QTimer.singleShot(2000, close_msg_box)
+                        # def close_msg_box():
+                        #     msg.close()
+                        # QTimer.singleShot(2000, close_msg_box)
                 else:
                     #print("NgÆ°á»i dÃ¹ng khÃ´ng tá»“n táº¡i trong cÆ¡ sá»Ÿ dá»¯ liá»‡u.")
                     msg = QMessageBox()
@@ -199,36 +188,39 @@ def face_recognition():
     cap.release()
     cv2.destroyWindow(window_name)
 
-# HÃ m chá»©c nÄƒng quÃ©t tháº» RFID
-def rfid_scanning():
-    # Äá»c ID cá»§a tháº» tá»« RFID
-    card_id = read_rfid()
-    if card_id:
-        owner_name = get_owner_name(card_id)
-        print("Chá»§ sá»Ÿ há»¯u cá»§a tháº»:", owner_name)
-        # Má»Ÿ cá»­a náº¿u tÃ¬m tháº¥y chá»§ sá»Ÿ há»¯u
-        user_id = get_user_id(owner_name)
-        if user_id:
-            unlock_door(user_id)
-        else:
-            #print("NgÆ°á»i dÃ¹ng khÃ´ng tá»“n táº¡i trong cÆ¡ sá»Ÿ dá»¯ liá»‡u.")
-            msg = QMessageBox()
-            msg.setWindowTitle("ThÃ´ng bÃ¡o")
-            msg.setText("Tháº» chÆ°a cÃ³ trong há»‡ thá»‘ng")
-            msg.exec_()  # Hiá»ƒn thá»‹ thÃ´ng bÃ¡o vÃ  chá» ngÆ°á»i dÃ¹ng Ä‘Ã³ng láº¡i
-            def close_msg_box():
-                msg.close()
-            QTimer.singleShot(2000, close_msg_box)
-    else:
-        #print("KhÃ´ng phÃ¡t hiá»‡n tháº» RFID.")
-        msg = QMessageBox()
-        msg.setWindowTitle("ThÃ´ng bÃ¡o")
-        msg.setText("Vui lÃ²ng quÃ©t tháº»")
-        msg.exec_()  # Hiá»ƒn thá»‹ thÃ´ng bÃ¡o vÃ  chá» ngÆ°á»i dÃ¹ng Ä‘Ã³ng láº¡i
-        def close_msg_box():
-            msg.close()
-        QTimer.singleShot(2000, close_msg_box)
-    return
+def arduino_rfid():
+    try:
+        # Open serial connection
+        ser = serial.Serial(SERIAL_PORT, SERIAL_RATE, timeout=1)
+        # Main loop
+        while True:
+            # Read data from Arduino
+            data = ser.readline().decode().strip()
+            if data:
+                card_id = data
+                print("Card:", card_id)
+                if card_id:
+                    # unlock_door()
+                    owner_name = get_owner_name(card_id)
+                    print("chu the la:", owner_name)
+                    # Má»Ÿ cá»­a náº¿u tÃ¬m tháº¥y chá»§ sá»Ÿ há»¯u
+                    user_id = get_user_id(owner_name)
+                    if user_id:
+                        unlock_door(user_id)
+                    else:
+                        print(" quet the")
+                    # print("NgÆ°á»i dÃ¹ng khÃ´ng tá»“n táº¡i trong cÆ¡ sá»Ÿ dá»¯ liá»‡u.")
+                else:
+                    print("Khong phat hien the RFID.")
+            time.sleep(0.1)
+    except KeyboardInterrupt:
+        print("Exiting program")
+    except Exception as e:
+        print("Error:", e)
+    finally:
+        # Close serial connection
+        if ser.is_open:
+            ser.close()        
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -293,7 +285,7 @@ class Ui_MainWindow(object):
         face_recognition()
     
     def rfid(seft):
-        rfid_scanning()
+        arduino_rfid()
         
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
