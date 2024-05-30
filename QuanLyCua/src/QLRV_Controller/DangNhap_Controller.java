@@ -14,7 +14,7 @@ public class DangNhap_Controller {
     public DangNhap_Controller() {
         try {
             Class.forName("org.sqlite.JDBC");
-            String url = "jdbc:sqlite:C:\\Users\\tuan\\Downloads\\yolov8\\detection_data.db"; 
+            String url = "jdbc:sqlite:src/db/detection_data.db";
             con = DriverManager.getConnection(url);
         } catch (Exception e) {
             System.out.println("Lỗi khi kết nối đến cơ sở dữ liệu: " + e.getMessage());

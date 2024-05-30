@@ -3,11 +3,30 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/tuan/AppData/Local/Programs/Java/Test/QuanLyQuanNET/src/QLQN_View/Panel_QLMB_view.java</file>
-            <file>file:/D:/tuan/AppData/Local/Programs/Java/Test/QuanLyQuanNET/src/QLQN_View/QL_MB_view.java</file>
-            <file>file:/D:/tuan/AppData/Local/Programs/Java/Test/QuanLyQuanNET/src/QLQN_Controller/QLLS_controller.java</file>
-            <file>file:/D:/tuan/AppData/Local/Programs/Java/Test/QuanLyQuanNET/src/QLQN_Controller/QLMB_controller.java</file>
-            <file>file:/D:/tuan/AppData/Local/Programs/Java/Test/QuanLyQuanNET/src/QLQN_View/LichSu_view.java</file>
+            <file>file:/D:/tuan/AppData/Local/Programs/Java/Test/QuanLyCua/src/QLRV_View/MB_ThongTin_view.java</file>
+            <file>file:/D:/tuan/AppData/Local/Programs/Java/Test/QuanLyCua/src/QLRV_Main/main.java</file>
+            <file>file:/D:/tuan/AppData/Local/Programs/Java/Test/QuanLyCua/src/QLRV_Model/QLMB_model.java</file>
+            <file>file:/D:/tuan/AppData/Local/Programs/Java/Test/QuanLyCua/src/QLRV_Controller/QLMB_controller.java</file>
+            <file>file:/D:/tuan/AppData/Local/Programs/Java/Test/QuanLyCua/src/QLRV_View/LS_Nam_view.java</file>
+            <file>file:/D:/tuan/AppData/Local/Programs/Java/Test/QuanLyCua/src/QLRV_View/QL_MB_view.java</file>
+            <file>file:/D:/tuan/AppData/Local/Programs/Java/Test/QuanLyCua/src/QLRV_View/Panel_QLLS_view.java</file>
+            <file>file:/D:/tuan/AppData/Local/Programs/Java/Test/QuanLyCua/src/QLRV_View/ThemThe_view.java</file>
+            <file>file:/D:/tuan/AppData/Local/Programs/Java/Test/QuanLyCua/src/QLRV_Controller/QLLS_controller.java</file>
+            <file>file:/D:/tuan/AppData/Local/Programs/Java/Test/QuanLyCua/src/QLRV_View/TK_Thang_view.java</file>
+            <file>file:/D:/tuan/AppData/Local/Programs/Java/Test/QuanLyCua/src/QLRV_Controller/DangNhap_Controller.java</file>
+            <file>file:/D:/tuan/AppData/Local/Programs/Java/Test/QuanLyCua/src/QLRV_Model/DangNhap_model.java</file>
+            <file>file:/D:/tuan/AppData/Local/Programs/Java/Test/QuanLyCua/src/QLRV_View/Panel_QLThe_view.java</file>
+            <file>file:/D:/tuan/AppData/Local/Programs/Java/Test/QuanLyCua/src/QLRV_View/Home.java</file>
+            <file>file:/D:/tuan/AppData/Local/Programs/Java/Test/QuanLyCua/src/QLRV_View/SuaMB_view.java</file>
+            <file>file:/D:/tuan/AppData/Local/Programs/Java/Test/QuanLyCua/src/QLRV_View/DangNhapAdmin_View.java</file>
+            <file>file:/D:/tuan/AppData/Local/Programs/Java/Test/QuanLyCua/src/QLRV_View/ThemMB_view.java</file>
+            <file>file:/D:/tuan/AppData/Local/Programs/Java/Test/QuanLyCua/src/QLRV_Controller/MB_controller.java</file>
+            <file>file:/D:/tuan/AppData/Local/Programs/Java/Test/QuanLyCua/src/QLRV_View/ChiTietThe_view.java</file>
+            <file>file:/D:/tuan/AppData/Local/Programs/Java/Test/QuanLyCua/src/QLRV_Controller/QLThe_controller.java</file>
+            <file>file:/D:/tuan/AppData/Local/Programs/Java/Test/QuanLyCua/src/QLRV_View/QL_Admin_view.java</file>
+            <file>file:/D:/tuan/AppData/Local/Programs/Java/Test/QuanLyCua/src/QLRV_View/MB_CaiDat_view.java</file>
+            <file>file:/D:/tuan/AppData/Local/Programs/Java/Test/QuanLyCua/src/QLRV_View/SuaThe_view.java</file>
+            <file>file:/D:/tuan/AppData/Local/Programs/Java/Test/QuanLyCua/src/QLRV_View/Panel_QLMB_view.java</file>
         </group>
     </open-files>
 </project-private>

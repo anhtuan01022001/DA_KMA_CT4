@@ -114,7 +114,7 @@ public class Panel_QLLS_view extends JPanel{
 
 //------------------------------------------------------------------------------------------------------    
         RightContent.setLayout(new MigLayout("fill","10[fill]10","10[fill]10"));
-        RightContent.add(lblTitleRight,"h 30!,w 100%, cell 0 0");
+        RightContent.add(lblTitleRight,"h 30!,w 100%");
         RightContent.add(pSearch,"h 36!,w 160!,cell 1 0, right");
 //        RightContent.add(btnX,"h 30!,w 30! , cell 1 0");
         RightContent.add(Right, "h 100%, w 100%, cell 0 1 2 1");
@@ -162,39 +162,55 @@ public class Panel_QLLS_view extends JPanel{
 //        btnX.setVisible(false);
 //    }
     
-    private void ActionSearch(){
-        pSearch.EvenSearch(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String textSearch = pSearch.getText();
-                if (textSearch.isEmpty()) {
+private void ActionSearch() {
+    // Kết nối tới cơ sở dữ liệu
+    try {
+        Class.forName("org.sqlite.JDBC");
+        String url = "jdbc:sqlite:src/db/detection_data.db"; 
+        con = DriverManager.getConnection(url);
+    } catch (Exception e) {
+        e.printStackTrace();
+        return; // Thoát phương thức nếu không kết nối được đến cơ sở dữ liệu
+    }
+
+    // Đăng ký sự kiện tìm kiếm
+    pSearch.EvenSearch(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String textSearch = pSearch.getText();
+            if (textSearch.isEmpty()) {
                 // Nếu ô tìm kiếm trống, chỉ hiển thị bảng lịch sử chung
-                    TableLeft.setVisible(true);
-                    TableRight.setVisible(false);
-                } else {
-                    // Nếu có nội dung trong ô tìm kiếm, hiển thị bảng kết quả tìm kiếm
-                    TableLeft.setVisible(true);
-                    TableRight.setVisible(true);
-                    String query = " Select QLLS.UserID, QLMembers.UserName, QLLS.TimeIn from QLLS  join QLMembers on QLLS.UserID = QLMembers.UserID where UserName = ? ";
-                    try {
-                        PreparedStatement ps = con.prepareStatement(query);
+                TableLeft.setVisible(true);
+                TableRight.setVisible(false);
+            } else {
+                // Nếu có nội dung trong ô tìm kiếm, hiển thị bảng kết quả tìm kiếm
+                TableLeft.setVisible(true);
+                TableRight.setVisible(true);
+                String query = "SELECT QLLS.UserID, QLMembers.UserName, QLLS.TimeIn " +
+                               "FROM QLLS JOIN QLMembers ON QLLS.UserID = QLMembers.UserID " +
+                               "WHERE UserName = ?";
+                try {
+                    PreparedStatement ps = con.prepareStatement(query);
+                    ps.setString(1, textSearch);
+                    ResultSet rs = ps.executeQuery();
+                    model.setRowCount(0);
 
-                        ps.setString(1,textSearch);
-                        ResultSet rs = ps.executeQuery();
-                        model.setRowCount(0);
-
-                        while(rs.next()){
-                            TableRight.addRow(new QLLS_model(rs.getInt("UserID"),rs.getString("UserName"),rs.getString("TimeIn")).toRowUser(even));
-                        }
-    //                    Right.removeAll();  // Xóa các thành phần cũ
-
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
+                    while (rs.next()) {
+                        TableRight.addRow(new QLLS_model(
+                            rs.getInt("UserID"),
+                            rs.getString("UserName"),
+                            rs.getString("TimeIn")
+                        ).toRowUser(even));
                     }
+
+                } catch (Exception e1) {
+                    e1.printStackTrace();
                 }
             }
-        });
-    }
+        }
+    });
+}
+
   
     private void autoUpdateData() {
         Timer timer = new Timer(30000, new ActionListener() { // Cập nhật dữ liệu sau mỗi 30 giây
@@ -209,7 +225,7 @@ public class Panel_QLLS_view extends JPanel{
         List<String> data1 = new ArrayList();
         try {
                         Class.forName("org.sqlite.JDBC");
-                        String url = "jdbc:sqlite:C:\\Users\\tuan\\Downloads\\yolov8\\detection_data.db"; 
+                        String url = "jdbc:sqlite:src/db/detection_data.db";
                         con = DriverManager.getConnection(url); 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -236,7 +252,8 @@ public class Panel_QLLS_view extends JPanel{
     
          try {
             Class.forName("org.sqlite.JDBC");
-            String url = "jdbc:sqlite:C:\\Users\\tuan\\Downloads\\yolov8\\detection_data.db"; 
+//            String url = "jdbc:sqlite:C:\\Users\\tuan\\Downloads\\yolov8\\detection_data.db"; 
+               String url = "jdbc:sqlite:src/db/detection_data.db";
             con = DriverManager.getConnection(url);
         } catch (Exception e) {
              

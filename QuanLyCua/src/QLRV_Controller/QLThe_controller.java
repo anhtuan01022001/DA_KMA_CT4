@@ -22,7 +22,7 @@ public class QLThe_controller {
     public QLThe_controller(){
         try {
             Class.forName("org.sqlite.JDBC");
-            String url = "jdbc:sqlite:C:\\Users\\tuan\\Downloads\\yolov8\\detection_data.db"; 
+            String url = "jdbc:sqlite:src/db/detection_data.db"; 
             conn = DriverManager.getConnection(url); 
         } catch (Exception e) {
              

@@ -122,7 +122,7 @@ public class ChiTietThe_view extends JPanel{
         
 		try {
 			Class.forName("org.sqlite.JDBC");
-                        String url = "jdbc:sqlite:C:\\Users\\tuan\\Downloads\\yolov8\\detection_data.db"; 
+                        String url = "jdbc:sqlite:src/db/detection_data.db";
                         conn = DriverManager.getConnection(url);
 		    
 		} catch (ClassNotFoundException | SQLException e1) {
@@ -131,17 +131,17 @@ public class ChiTietThe_view extends JPanel{
 			}
 
 		final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-	    executorService.scheduleAtFixedRate(new Runnable() {
-	    	
-	        @Override
-	        public void run() {
-		
-	           truycap(c.TenMbName(model.getUserID()));
-                   NameKH.setText("Tài khoản: "+c.TenMbName(model.getUserID()));
-                    
-                }
-	      
-	    }, 0, 1, TimeUnit.SECONDS);
+//	    executorService.scheduleAtFixedRate(new Runnable() {
+//	    	
+//	        @Override
+//	        public void run() {
+//		
+//	           truycap(c.TenMbName(model.getUserID()));
+//                   NameKH.setText("Tài khoản: "+c.TenMbName(model.getUserID()));
+//                    
+//                }
+//	      
+//	    }, 0, 1, TimeUnit.SECONDS);
     }
     
         private boolean showConfirm(String message) {
@@ -151,45 +151,45 @@ public class ChiTietThe_view extends JPanel{
     }
 	
 	
-	public void truycap(String name) {
-		String STN = new String();
-		
-		try {
-			PreparedStatement pstm2 = conn.prepareStatement("select sotiennap from AccountMember where MbName = ?");
-			pstm2.setString(1,name );
-			
-			ResultSet rs = pstm2.executeQuery();
-			if(rs.next()) {
-				ST=rs.getInt("SoTienNap");
-				
-                                
-				lblMoney.setText("Số tiền còn lại:  "+format1.format(ST)+"đ");
-				
-				
-			}
-	
-		} catch (SQLException e1) {
-			
-			e1.printStackTrace();
-		}
-		
-		
-		int gio,phut,giay;
-		float time;
-		time= (float)ST/10000;
-		
-		
-		gio=(int)time;
-		time=time-gio;
-		time=time*60;
-		phut= (int)time;
-		time=time-phut;
-		time=time*60;
-		giay=(int)time;
-		
-		String hiengio=String.valueOf(gio)+":"+String.valueOf(phut)+":"+String.valueOf(giay);
-		lblTime.setText("Số giờ còn lại:  "+hiengio);
-	}
+//	public void truycap(String name) {
+//		String STN = new String();
+//		
+//		try {
+//			PreparedStatement pstm2 = conn.prepareStatement("select sotiennap from AccountMember where MbName = ?");
+//			pstm2.setString(1,name );
+//			
+//			ResultSet rs = pstm2.executeQuery();
+//			if(rs.next()) {
+//				ST=rs.getInt("SoTienNap");
+//				
+//                                
+//				lblMoney.setText("Số tiền còn lại:  "+format1.format(ST)+"đ");
+//				
+//				
+//			}
+//	
+//		} catch (SQLException e1) {
+//			
+//			e1.printStackTrace();
+//		}
+//		
+//		
+//		int gio,phut,giay;
+//		float time;
+//		time= (float)ST/10000;
+//		
+//		
+//		gio=(int)time;
+//		time=time-gio;
+//		time=time*60;
+//		phut= (int)time;
+//		time=time-phut;
+//		time=time*60;
+//		giay=(int)time;
+//		
+//		String hiengio=String.valueOf(gio)+":"+String.valueOf(phut)+":"+String.valueOf(giay);
+//		lblTime.setText("Số giờ còn lại:  "+hiengio);
+//	}
     
     
     
